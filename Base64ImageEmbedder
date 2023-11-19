@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+import base64
+import sys
+import re
+
+def concat(img_data):
+    prefix = "data:image/png;base64,"
+    return  prefix + img_data
+
+def pre_check():
+    if len(sys.argv) != 2:
+        print("Usage: python input.md")
+        sys.exit(1)
+
+def main():
+    pre_check()
+
+    file=sys.argv[1]
+    encoding = "utf-8"
+
+    with open(file, "r") as f:
+        data = f.read()
+        image_names = re.findall("!\[.*\]\((.*)\)", data)
+
+        for image in image_names:
+            with open(image, "rb") as image2string: 
+                converted_string = base64.b64encode(image2string.read()) 
+                data = data.replace(image, concat(converted_string.decode(encoding)))
+
+        output_file = f"output_{file}"
+        with open(output_file, 'w') as f:
+            f.write(data)
+            print(f"Exported as {output_file}.")
+
+if __name__ == '__main__':
+    main()
