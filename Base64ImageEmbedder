@@ -13,7 +13,7 @@ def main():
     with open(file, "r") as f:
         data = f.read()
         output_file = f"output_{file}"
-        image_names = re.findall("!\[.*\]\((.*)\)", data)
+        image_names = re.findall(r"!\[.*\]\((.*)\)", data)
 
         for image in image_names:
             with open(image, "rb") as image2string: 
